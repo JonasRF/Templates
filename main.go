@@ -10,10 +10,15 @@ type Curso struct {
 	CargaHoraria int
 }
 
+type Cursos []Curso
+
 func main() {
-	curso := Curso{Nome: "Go", CargaHoraria: 10}
-	t := template.Must(template.New("CursoTemplate").Parse("Curso: {{.Nome}} - Carga Horária: {{.CargaHoraria}}"))
-	err := t.Execute(os.Stdout, curso)
+	t := template.Must(template.New("template.html").ParseFiles("template.html"))
+	err := t.Execute(os.Stdout, Cursos{
+		{"GO", 40},
+		{"Java", 100},
+		{"JavaScript", 100},
+	})
 	if err != nil {
 		panic(err)
 	}
