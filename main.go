@@ -2,7 +2,7 @@ package main
 
 import (
 	"html/template"
-	"os"
+	"net/http"
 )
 
 type Curso struct {
@@ -13,13 +13,16 @@ type Curso struct {
 type Cursos []Curso
 
 func main() {
-	t := template.Must(template.New("template.html").ParseFiles("template.html"))
-	err := t.Execute(os.Stdout, Cursos{
-		{"GO", 40},
-		{"Java", 100},
-		{"JavaScript", 100},
+	http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
+		t := template.Must(template.New("template.html").ParseFiles("template.html"))
+		err := t.Execute(w, Cursos{
+			{"GO", 40},
+			{"Java", 100},
+			{"JavaScript", 100},
+		})
+		if err != nil {
+			panic(err)
+		}
 	})
-	if err != nil {
-		panic(err)
-	}
+	http.ListenAndServe(":8282", nil)
 }
